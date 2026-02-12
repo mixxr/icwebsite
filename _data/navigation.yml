@@ -1,0 +1,16 @@
+# Sample site navigation bar links
+
+- title: Home
+  url: /
+- title: Investments Ideas
+  url: /investments/
+- title: Search
+  url: /search/
+- title: Markup
+  url: /tags/markup/
+- title: Posts
+  url: /posts/
+- title: Quotes
+  url: /quotes/
+# - title: External Page
+#   url: https://the-page.com/you-want-to-link-to.html
