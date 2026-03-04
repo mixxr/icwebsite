@@ -34,6 +34,8 @@ permalink: /:title/
 collections:
   issuers:
     output: true
+  quotes:
+    output: true
 
 # Build settings
 # theme: minima
@@ -58,7 +60,9 @@ navbar-links:
     - BNP: "issuers/bnp"
     - Marex: "issuers/marex"
     - Request: "issuers/request"
-  Quotes: "quotes"
+  Quotes: 
+    - By Issuer: "quotes"
+    - By Date: "quotes/by-date"
 
 ################
 # --- Logo --- #

@@ -15,11 +15,31 @@
 <script>
     console.log('DataTables starting...');
 
-    getData = async function () {
+    getData = async function (redirect = true) {
         console.log('DataTables getData called');
         try {
-            console.log('Fetching data from {{ page.dataTableUrl }}');
-            let response = await fetch('{{ page.dataTableUrl }}');
+            // retrieve the path from the data attribute (data-dt-path) of the table element with id "dTable" and concat with page.dataTableUrl
+            //let dtPath = $('#dTable').data('dt-path');
+            let url = '{{ page.dataTableUrl }}'; // it is in format http://host:port/path/$param1/$param2, so we need to replace :param1 and :param2 with actual values
+            console.log('Fetching data from', url);
+            // replace $param1 with ?param1=<value1> from actual querystring
+            let queryString = new URLSearchParams(window.location.search);
+            let param1 = queryString.get('source');
+            let param2 = queryString.get('isin');
+            let param3 = queryString.get('dt');
+            if (param1) {
+                url = url.replace('$source', param1);
+            }
+            if (param2) {
+                url = url.replace('$isin', param2);
+            }
+            if (param3) {
+                url = url.replace('$dt', param3);
+            }else {
+               url = url.replace('$dt', 'latest');
+            }
+            console.log('Fetching data from', url);
+            let response = await fetch(url);
             const data = await response.json();
             //     url: '{{ page.dataTableUrl }}',
             //     //crossDomain: true, 
@@ -27,6 +47,13 @@
             //     dataSrc: '',
             //   });
             console.log('DataTables data loaded:', data.length, data);
+            // check if HTTP status is not 200, then throw error
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+                if (redirect) {
+                    window.location.href = '/404.html';
+                }
+            }
             // remove 1st row because it contains column names, not data
             data.shift();
             let ret = data.map(function (item) {
@@ -36,6 +63,9 @@
 
         } catch (error) {
             console.error('Error in getData:', error);
+            if (redirect) {
+                window.location.href = '/404.html';
+            }
             return [];
         }
     };
@@ -50,7 +80,7 @@
             //        .on('select', () => console.log('DataTables data received:', 'select'))
             //        .on('user-select', () => console.log('DataTables data received:', 'user-select'));
 
-            new DataTable('#myTable', {
+            new DataTable('#dTable', {
                 //ajax: 'http://localhost:8090/sources'
                 data: data,
                 columnDefs: [
@@ -58,7 +88,12 @@
                         targets: 0,
                         data: 'download_link',
                         render: function (data, type, row, meta) {
-                            return '<a href="./' + row[0] + '">' + row[0] + '</a>';
+                            let queryString = new URLSearchParams(window.location.search);
+                            let param1 = queryString.get('source');
+                            if (!param1) {
+                                param1 = '';
+                            }
+                            return '<a href="/quotes?source={{page.slug}}' + param1 + '&isin=' + row[0] + '">' + row[0] + '</a>';
                         }
                     }
                 ],
