@@ -1,0 +1,82 @@
+---
+layout: page
+title: Certificates Analysis by Company
+subtitle: How a single company can influence a set of certificates
+#dataTableUrl: http://127.0.0.1:8090/quotes/$source/$dt/$isin
+ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
+head-extra: dtable-header.html
+footer-extra: dtable.html
+comments: false
+# ext-js: [
+#     //cdn.datatables.net/2.3.7/js/dataTables.dataTables.min.js, 
+#     //code.jquery.com/jquery-3.5.1.min.js
+# ]
+---
+<div class="container">
+<p>Select the company and analyze the certificates impacted by it.</p>
+
+<select name="ticker" id="ticker-select">
+  <option value="">--Please choose an option--</option>
+</select>
+<script>
+document.getElementById('ticker-select').addEventListener('change', function() {
+    var ticker = this.value;
+    if (ticker) {
+        // Fetch data from the API endpoint
+        console.log("Selected ticker: " + ticker);
+        // call http://localhost:8090/certificates/<ticker> and populate the #dTable with the response by using dataTables library  
+        fetch('http://localhost:8090/certificates/' + ticker)
+            .then(response => response.json())
+            .then(data => {
+                // Initialize DataTable
+                const table = $('#dTable').DataTable({
+                    data: data,
+                    columns: [
+                        { title: "ISIN", data: "isin" },
+                        { title: "Name", data: "name" },
+                        { title: "Ask", data: "ask" },
+                        { title: "Bid", data: "bid" },
+                        { title: "Currency", data: "currency" },
+                        { title: "Obs Date", data: "obs_date" }
+                    ]
+                });
+            })
+            .catch(error => console.error('Error fetching certificates:', error));
+    } else {
+        console.log("No ticker selected");
+    }
+});
+</script>
+<script>
+  // call http://localhost:8090/tickers/all and populate the select options with the response
+  fetch('http://localhost:8090/tickers/all')
+    .then(response => response.json())
+    .then(data => {
+      const select = document.getElementById('ticker-select');
+      data.forEach(ticker => {
+        const option = document.createElement('option');
+        option.value = ticker;
+        option.textContent = ticker;
+        select.appendChild(option);
+      });
+    })
+    .catch(error => console.error('Error fetching tickers:', error)); 
+</script>
+<div>
+CERTIFICATES
+<table id="dTable" data-dt-path="">
+<thead>
+    <tr>
+    <th>ISIN</th>
+    <th>Name</th>
+    <th>Ask</th>
+    <th>Bid</th>
+    <th>Currency</th>
+    <th>Obs Date</th>
+  </tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+</div>
