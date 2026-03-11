@@ -2,7 +2,7 @@
 layout: page
 title: Certificates Analysis by Company
 subtitle: How a single company can influence a set of certificates
-#dataTableUrl: http://127.0.0.1:8090/quotes/$source/$dt/$isin
+dataTableUrl: http://127.0.0.1:8090/certificates/$ticker
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
 head-extra: dtable-header.html
 footer-extra: dtable.html
@@ -27,19 +27,38 @@ document.getElementById('ticker-select').addEventListener('change', function() {
         // call http://localhost:8090/certificates/<ticker> and populate the #dTable with the response by using dataTables library  
         fetch('http://localhost:8090/certificates/' + ticker)
             .then(response => response.json())
-            .then(data => {
+            .then(dataRaw => {
                 // Initialize DataTable
-                const table = $('#dTable').DataTable({
-                    data: data,
-                    columns: [
+                // let table = new DataTable('#dTable', {
+                //     data: data,
+                //     columns: [
+                //         { title: "ISIN", data: "isin" },
+                //         { title: "Name", data: "name" },
+                //         { title: "Ask", data: "ask" },
+                //         { title: "Bid", data: "bid" },
+                //         { title: "Currency", data: "currency" },
+                //         { title: "Obs Date", data: "obs_date" }
+                //     ]
+                // });
+                //var table = document.getElementById('dTable').DataTable();
+                dataRaw.shift();
+            let data = dataRaw.map(function (item) {
+                return item.split(','); // wrap each string in an array
+            });
+
+                console.log('DataTable retrieved:', table);
+                table.clear(); // Clear existing data
+                table.rows.add(data); // Add new data
+                table.columns = [
                         { title: "ISIN", data: "isin" },
                         { title: "Name", data: "name" },
                         { title: "Ask", data: "ask" },
                         { title: "Bid", data: "bid" },
                         { title: "Currency", data: "currency" },
                         { title: "Obs Date", data: "obs_date" }
-                    ]
-                });
+                    ];
+                table.draw(); // Redraw the table to reflect the new data
+                console.log('Certificates data loaded:', data.length, data);
             })
             .catch(error => console.error('Error fetching certificates:', error));
     } else {
@@ -52,11 +71,15 @@ document.getElementById('ticker-select').addEventListener('change', function() {
   fetch('http://localhost:8090/tickers/all')
     .then(response => response.json())
     .then(data => {
+      console.log('Tickers retrieved:', data);
       const select = document.getElementById('ticker-select');
       data.forEach(ticker => {
+        // split ticketer by comma and take the first part as the ticker name
+        value = ticker.split(',')[0];
+        name = ticker.split(',')[1];
         const option = document.createElement('option');
-        option.value = ticker;
-        option.textContent = ticker;
+        option.value = value;
+        option.textContent = name + ' (' + value + ')';
         select.appendChild(option);
       });
     })

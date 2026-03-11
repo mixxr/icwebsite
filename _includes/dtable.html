@@ -21,22 +21,21 @@
             // retrieve the path from the data attribute (data-dt-path) of the table element with id "dTable" and concat with page.dataTableUrl
             //let dtPath = $('#dTable').data('dt-path');
             let url = '{{ page.dataTableUrl }}'; // it is in format http://host:port/path/$param1/$param2, so we need to replace :param1 and :param2 with actual values
-            console.log('Fetching data from', url);
-            // replace $param1 with ?param1=<value1> from actual querystring
-            let queryString = new URLSearchParams(window.location.search);
-            let param1 = queryString.get('source');
-            let param2 = queryString.get('isin');
-            let param3 = queryString.get('dt');
-            if (param1) {
-                url = url.replace('$source', param1);
-            }
-            if (param2) {
-                url = url.replace('$isin', param2);
-            }
-            if (param3) {
-                url = url.replace('$dt', param3);
-            }else {
-               url = url.replace('$dt', 'latest');
+            // extract param names from the url variable, which are in format $param1, $param2, etc. and store them in an array
+            let paramNames = url.match(/\$[a-zA-Z0-9_]+/g);
+            console.log('Fetching data from', url, 'with params', paramNames);
+            // get querystring parameters if paramNames is not empty and replace $param with actual value from querystring
+            if (paramNames &&paramNames.length > 0) {
+                // remove $ from param names
+                paramNames = paramNames.map(param => param.substring(1));
+                let queryString = new URLSearchParams(window.location.search);
+                // loop through paramNames and replace $param with actual value from querystring
+                paramNames.forEach(param => {
+                    let value = queryString.get(param);
+                    if (value) {
+                        url = url.replace('$' + param, value);
+                    }
+                });
             }
             console.log('Fetching data from', url);
             let response = await fetch(url);
@@ -69,7 +68,7 @@
             return [];
         }
     };
-
+    var table = new DataTable('#dTable');
     $(document).ready(function () {
         console.log('DataTables document ready');
 
@@ -79,25 +78,27 @@
             //        .on('search', () => console.log('DataTables data received:', 'search'))
             //        .on('select', () => console.log('DataTables data received:', 'select'))
             //        .on('user-select', () => console.log('DataTables data received:', 'user-select'));
-
-            new DataTable('#dTable', {
+// https://blog.devgenius.io/making-use-of-columndefs-option-in-datatables-bc0fcc23f793
+            table.clear().draw();
+            table.destroy();
+            table = new DataTable('#dTable', {
                 //ajax: 'http://localhost:8090/sources'
                 data: data,
                 columnDefs: [
                     {
-                        targets: 0,
+                        targets: [0],
                         data: 'download_link',
                         render: function (data, type, row, meta) {
-                            let queryString = new URLSearchParams(window.location.search);
-                            let param1 = queryString.get('source');
-                            if (!param1) {
-                                param1 = '';
-                            }
-                            return '<a href="/quotes?source={{page.slug}}' + param1 + '&isin=' + row[0] + '">' + row[0] + '</a>';
+                            // let queryString = new URLSearchParams(window.location.search);
+                            // let param1 = queryString.get('source');
+                            // if (!param1) {
+                            //     param1 = '';
+                            // }
+                            // return '<a href="/quotes?source={{page.slug}}' + param1 + '&isin=' + row[0] + '">' + row[0] + '</a>';
+                            return '<a href="/quotes?source=' + row[0] + '">' + row[0] + '</a>';
                         }
                     }
-                ],
-            });
+                ]});
         });
     });
 </script>
