@@ -1,0 +1,37 @@
+# issuers
+
+/issuers
+
+Name
+Website
+
+# certificates (description)
+
+/certificates
+/certificates/<isin>
+/certificates?ticker=<ticker>
+/certificates?issuer=<issuer>
+
+ISIN
+Issuer
+Name
+Composition (tickers)
+Issue date
+Exp. date
+Coupon (%/freq.)
+Type [tags]
+
+# quotes
+/quotes/<isin>/<dt>
+/quotes/<isin>/latest
+/quotes/<isin>/latest-1
+
+ISIN
+Name
+Ask
+Bid
+Currency
+DT
+
+
+

@@ -136,3 +136,13 @@ exclude:
   - "*_copy*"
   - "*.txt"
   - "**/*.old"
+
+## #################
+## Content settings
+## #################
+
+issuers_par1_title: Personal feedback about data clarity
+issuers_par2_title: Certificates under observation
+issuers_par2_content: This website monitors the following investment certificates. 
+
+## ################# End of content settings

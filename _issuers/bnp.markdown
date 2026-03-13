@@ -11,6 +11,18 @@ comments: false
 ---
 BNP is...
 
+## {{ site.issuers_par1_title }}
+The website provides clear information regarding: 
+- calendar, 
+- coupon ex-date, 
+- levels and barriers
+
+Rating: 4/5
+
+## {{ site.issuers_par2_title }}
+{{ site.issuers_par2_content }}
+Note: If you would like to add your own certificate, please send us a [message](../request)
+
 <div>
 TABLE /isins/bnp
 <!-- data attr is not used --> 
