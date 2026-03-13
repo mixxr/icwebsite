@@ -64,8 +64,7 @@ navbar-links:
     - Marex: "issuers/marex"
     - Request: "issuers/request"
   Quotes: 
-    - By Issuer: "quotes"
-    - By Date: "quotes/by-date"
+    - By ISIN: "quotes/by-isin"
   Analysis: 
     - By Ticker: "analysis/by-ticker"
     - By Type: "analysis/by-type"

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Quotes
-dataTableUrl: http://127.0.0.1:8090/quotes/$source/$dt/$isin
+dataTableUrl: http://127.0.0.1:8090/quotes/$isin/latest
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
 head-extra: dtable-header.html
 footer-extra: dtable.html
@@ -12,7 +12,7 @@ permalink: /quotes
 #     //code.jquery.com/jquery-3.5.1.min.js
 # ]
 ---
-# Quotes
+# {{ page.title }}
 <!-- <div class="datatable-begin"></div>
 
 source    | content_type                           | extractor_type | base_url
@@ -23,7 +23,16 @@ Kiwis   | A small, hairy-skinned sweet ...      | Fruit    | Golden
 Oranges | A spherical, orange-colored sweet ... | Fruit    | Navel
 
 
-<div class="datatable-end"></div> /quotes/:sources/latest/:isin -->
+<div class="datatable-end"></div> /quotes/:sources/latest/:isin 
+/quotes/<isin>/latest
+
+ISIN
+Name
+Ask
+Bid
+Currency
+DT
+-->
 <div>
 TABLE
 <table id="dTable" data-dt-path="">

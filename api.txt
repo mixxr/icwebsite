@@ -18,6 +18,7 @@ Name
 Composition (tickers)
 Issue date
 Exp. date
+Currency
 Coupon (%/freq.)
 Type [tags]
 
@@ -25,6 +26,7 @@ Type [tags]
 /quotes/<isin>/<dt>
 /quotes/<isin>/latest
 /quotes/<isin>/latest-1
+/quotes/<isin>/<dt>?timespan=<days>
 
 ISIN
 Name
@@ -33,5 +35,11 @@ Bid
 Currency
 DT
 
+# tickers
 
+/tickers
+/tickers?prefix=<prefix>
+
+Ticker
+Name
 

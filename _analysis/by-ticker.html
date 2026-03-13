@@ -2,7 +2,7 @@
 layout: page
 title: Certificates Analysis by Company
 subtitle: How a single company can influence a set of certificates
-dataTableUrl: http://127.0.0.1:8090/certificates/$ticker
+dataTableUrl: http://127.0.0.1:8090/certificates?ticker=$ticker
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
 head-extra: dtable-header.html
 footer-extra: dtable.html
@@ -24,8 +24,8 @@ document.getElementById('ticker-select').addEventListener('change', function() {
     if (ticker) {
         // Fetch data from the API endpoint
         console.log("Selected ticker: " + ticker);
-        // call http://localhost:8090/certificates/<ticker> and populate the #dTable with the response by using dataTables library  
-        fetch('http://localhost:8090/certificates/' + ticker)
+        // call http://localhost:8090/certificates?ticker=<ticker> and populate the #dTable with the response by using dataTables library
+        fetch('http://localhost:8090/certificates?ticker=' + ticker)
             .then(response => response.json())
             .then(dataRaw => {
                 // Initialize DataTable
@@ -49,14 +49,14 @@ document.getElementById('ticker-select').addEventListener('change', function() {
                 console.log('DataTable retrieved:', table);
                 table.clear(); // Clear existing data
                 table.rows.add(data); // Add new data
-                table.columns = [
-                        { title: "ISIN", data: "isin" },
-                        { title: "Name", data: "name" },
-                        { title: "Ask", data: "ask" },
-                        { title: "Bid", data: "bid" },
-                        { title: "Currency", data: "currency" },
-                        { title: "Obs Date", data: "obs_date" }
-                    ];
+                // table.columns = [
+                //         { title: "ISIN", data: "isin" },
+                //         { title: "Name", data: "name" },
+                //         { title: "Ask", data: "ask" },
+                //         { title: "Bid", data: "bid" },
+                //         { title: "Currency", data: "currency" },
+                //         { title: "Obs Date", data: "obs_date" }
+                //     ];
                 table.draw(); // Redraw the table to reflect the new data
                 console.log('Certificates data loaded:', data.length, data);
             })
@@ -67,8 +67,8 @@ document.getElementById('ticker-select').addEventListener('change', function() {
 });
 </script>
 <script>
-  // call http://localhost:8090/tickers/all and populate the select options with the response
-  fetch('http://localhost:8090/tickers/all')
+  // call http://localhost:8090/tickers and populate the select options with the response
+  fetch('http://localhost:8090/tickers')
     .then(response => response.json())
     .then(data => {
       console.log('Tickers retrieved:', data);
@@ -87,15 +87,18 @@ document.getElementById('ticker-select').addEventListener('change', function() {
 </script>
 <div>
 CERTIFICATES
-<table id="dTable" data-dt-path="">
+<table id="dTable" data-dt-path="" data-dt-run="false">
 <thead>
-    <tr>
+  <tr>
     <th>ISIN</th>
+    <th>Issuer</th>
     <th>Name</th>
-    <th>Ask</th>
-    <th>Bid</th>
+    <th>Composition</th>
+    <th>Issued</th>
+    <th>Expires</th>
     <th>Currency</th>
-    <th>Obs Date</th>
+    <th>Coupon</th>
+    <th>Type</th>
   </tr>
 </thead>
 <tbody>

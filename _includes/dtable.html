@@ -14,7 +14,7 @@
       -->
 <script>
     console.log('DataTables starting...');
-
+    
     getData = async function (redirect = true) {
         console.log('DataTables getData called');
         try {
@@ -71,6 +71,8 @@
     var table = new DataTable('#dTable');
     $(document).ready(function () {
         console.log('DataTables document ready');
+        let dtRun = $('#dTable').data('dt-run');
+        if (dtRun!=undefined && !dtRun) return;
 
         getData().then(function (data) {
             console.log('DataTables data received:', data);
@@ -95,7 +97,7 @@
                             //     param1 = '';
                             // }
                             // return '<a href="/quotes?source={{page.slug}}' + param1 + '&isin=' + row[0] + '">' + row[0] + '</a>';
-                            return '<a href="/quotes?source=' + row[0] + '">' + row[0] + '</a>';
+                            return '<a href="/quotes?isin=' + row[0] + '">' + row[0] + '</a>';
                         }
                     }
                 ]});
