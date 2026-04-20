@@ -1,0 +1,10 @@
+{
+    "name": "Jekyll Development",
+    "image": "mcr.microsoft.com/devcontainers/jekyll:latest",
+    "postCreateCommand": "./.devcontainer/setup.sh",
+    "features": {
+       "ghcr.io/devcontainers/features/node:1": {
+            "version": "latest"
+            }
+    }
+}    
