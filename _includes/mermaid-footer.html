@@ -19,5 +19,36 @@
               };
 
     </script>
-  
+  <script>
+    const inputData = [
+    { "certificate": "cert1", "ticker": "ticker1" },
+    { "certificate": "cert1", "ticker": "ticker2" },
+    { "certificate": "cert1", "ticker": "ticker3" },
+    { "certificate": "cert1", "ticker": "ticker4" },
+    { "certificate": "cert2", "ticker": "ticker2" },
+    { "certificate": "cert2", "ticker": "ticker3" },
+    { "certificate": "cert2", "ticker": "ticker5" }
+];
+
+function transformJsonToCsv(data) {
+    // 1. Count occurrences of each certificate
+    const certCounts = data.reduce((acc, item) => {
+        acc[item.certificate] = (acc[item.certificate] || 0) + 1;
+        return acc;
+    }, {});
+
+    // 2. Map data to CSV rows with the calculated integer
+    const csvRows = data.map(item => {
+        const totalForCert = certCounts[item.certificate];
+        const weight = Math.round(100 / totalForCert); // Using Math.round for "approx"
+        
+        return `${item.certificate}, ${item.ticker}, ${weight}`;
+    });
+
+    return csvRows.join('\n');
+}
+
+const result = transformJsonToCsv(inputData);
+console.log(result);
+  </script>
 {%- endif %}

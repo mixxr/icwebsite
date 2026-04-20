@@ -9,18 +9,35 @@ Website
 
 /certificates
 /certificates/<isin>
-/certificates?ticker=<ticker>
 /certificates?issuer=<issuer>
 
 ISIN
 Issuer
 Name
-Composition (tickers)
+Underlyings (tickers)
 Issue date
 Exp. date
 Currency
 Coupon (%/freq.)
 Type [tags]
+
+# certificates-tickers
+/certificates-tickers?tickers=[<ticker1>,...,<tickerN>]&op=[OR|AND]
+/certificates-tickers?certificates=[<cart1>,...,<certN>]&op=[OR|AND]
+{
+    [
+        { "certificate":"cert1", "ticker": "ticker1"},
+        { "certificate":"cert1", "ticker": "ticker2"},
+        { "certificate":"cert1", "ticker": "ticker3"},
+        { "certificate":"cert1", "ticker": "ticker4"},
+        { "certificate":"cert2", "ticker": "ticker2"},
+        { "certificate":"cert2", "ticker": "ticker3"},
+        { "certificate":"cert2", "ticker": "ticker5"},
+        ...
+    ]
+}
+
+
 
 # quotes
 /quotes/<isin>/<dt>
