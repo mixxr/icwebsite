@@ -67,7 +67,7 @@ navbar-links:
     - By ISIN: "quotes/by-isin"
   Analysis: 
     - By Ticker: "analysis/by-ticker"
-    - By Type: "analysis/by-type"
+    - Portfolio: "analysis/portfolio"
 
 ################
 # --- Logo --- #

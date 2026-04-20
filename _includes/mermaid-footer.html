@@ -1,0 +1,23 @@
+<script>
+    console.log('mermaid-footer.html loaded');
+</script>
+{% if page.hasMermaid %}
+ <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: false });
+        let g =  document.getElementsByClassName("mermaid")[0];
+        let t = document.getElementById("preview");
+        console.log("preview=", t);
+        t.onchange = function (){
+                console.log("preview::change...", mermaid);
+                // read new data from textarea
+                
+                g.innerHTML = t.value;
+                mermaid.run({
+                        nodes: document.getElementsByClassName("mermaid"),
+                });
+              };
+
+    </script>
+  
+{%- endif %}

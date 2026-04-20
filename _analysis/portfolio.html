@@ -1,0 +1,37 @@
+---
+layout: page
+title: Portfolio Analysis
+subtitle: How a single company can influence your portfolio
+hasMermaid: true
+ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
+footer-extra: mermaid-footer.html
+comments: false
+---
+<pre class="mermaid">
+  sankey-beta
+
+AA 'waste',Bio,10
+BB ,Bio,10
+CC ,Bio,10
+    </pre>
+    <button id="test">Test</button>
+    <textarea id="preview" hidden></textarea>
+
+    <script>
+            document.getElementById('test').onclick = function (){
+                console.log("test::click...");
+                let t = document.getElementById("preview");
+                t.value = `  sankey-beta
+                  AA 'waste',Bio,10
+                  BB ,Bio,10
+                  CC ,Bio,10
+                  AA, Trio, 20
+                  CC, Trio, 20
+                  DD, Bio, 10
+                  EE, Alpha, 15
+                  CC, Alpha, 15
+                  BB, Alpha, 15`;
+
+t.onchange();
+        }
+    </script>

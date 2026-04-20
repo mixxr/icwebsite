@@ -1,0 +1,48 @@
+---
+layout: page
+title: Certificates Analysis by Tickers
+subtitle: How a single company can influence a set of certificates
+hasMermaid: true
+ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
+footer-extra: mermaid-footer.html
+comments: false
+---
+<div class="container">
+ Here is one mermaid diagram:
+    <pre class="mermaid">
+        graph LR
+        A --- B
+        B-->C[fa:fa-ban forbidden]
+        B-->D(fa:fa-spinner);
+   </pre>
+    
+</div>
+<div>
+        <input id="btn-ticker" type="button" value="Populate"/>
+</div>
+<script>
+        console.log("loading....");
+        
+        document.getElementById('btn-ticker').addEventListener('click', function() {
+                let mmC1 = document.getElementById('mmC1');
+                console.log("mmC1", mmC1.innerHTML);
+                mmC1.innerHTML=`graph TB
+                        A[13,032] --> |NO John's Offer| B[12,000]
+                        A ==> |Reject John's Offer |C(($13,032))`;
+                changeG();
+        });
+       function changeG() {
+                console.log("onChange...");
+                var config = {
+                        startOnLoad:true,
+                        htmlLabels:true,
+                        callback:function(id){
+                                console.log(id,' rendered');
+                        },
+                        flowchart:{
+                                useMaxWidth:false,
+                                }
+                        };
+                mermaid.initialize(config);
+        };
+</script>
