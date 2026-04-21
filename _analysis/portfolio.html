@@ -5,7 +5,7 @@ subtitle: How a single company can influence your portfolio
 hasMermaid: true
 footer-extra: mermaid-footer.html
 comments: false
-certificatesUrl: http://127.0.0.1:8080/certificates-tickers/$ticker1,$ticker2,$ticker3
+certificatesUrl: http://127.0.0.1:8080/certificates-tickers/$cert1,$cert2,$cert3
 ---
 <pre class="mermaid">
   sankey-beta
@@ -14,32 +14,69 @@ AA 'waste',Bio,10
 BB ,Bio,10
 CC ,Bio,10
     </pre>
-<button id="btnTest">Test</button>
+<button id="btnSwap">Swap Certs/Tickers</button>
+
+<label for="cert_select">Select a certificate:</label>
+<select name="cert_select" id="cert_select">
+  <option value="">--Please choose an option--</option>
+</select>
+
 <textarea id="preview" hidden></textarea>
 
 <script>
-  let tt = false;
-  document.getElementById('btnTest').onclick = async function () {
-    tt = !tt;
+    let swapSwitch = false;
+    let data = []; // entry is like "Cert ISIN, Certificate Name,Ticker, Stock Name"
+    let preview = document.getElementById("preview");
+
+   document.getElementById('cert_select').onchange = async function () {
+    let selectedCertISIN = this.value;
+    console.log("Selected cert ISIN: " + selectedCertISIN);
+      let result = selectedCertISIN + ", Apple AAPL, 10\n" + selectedCertISIN + ", Microsoft MSFT, 10\n" + selectedCertISIN + ", Salesforce CRM, 10\n";
+
+      preview.value = "  sankey-beta\n" + result;
+
+      preview.onchange();
+   }
+  document.getElementById('btnSwap').onclick = async function () {
+    swapSwitch = !swapSwitch;
     //console.log("test::click...tt:", tt, tt ? 'target-to-source' : 'source-to-target');
     let url = '{{ page.certificatesUrl }}'; 
     let paramNames = url.match(/\$[a-zA-Z0-9_]+/g);
     //console.log('Fetching data from', url, 'with params', paramNames);
      paramNames.forEach(param => {
-        let value = "AAPL";
+        let value = "IT3424234324";
         if (value) {
             url = url.replace('$' + param, value);
         }
     });
     console.log('Fetching data from', url);
     let response = await fetch(url);
-    const data = await response.json();
+    data = await response.json();
     console.log("test::data:", data);
-    const result = transformArrayToCsv(data, tt ? 'target-to-source' : 'source-to-target');
+    const result = transformArrayToCsv(data, swapSwitch ? 'target-to-source' : 'source-to-target');
 
-    let t = document.getElementById("preview");
-    t.value = "  sankey-beta\n" + result;
-        
-    t.onchange();
+    preview.value = "  sankey-beta\n" + result;
+
+    preview.onchange();
+
+    // reset select by leaving the 1st entry only and update select with unique ISINs from the data (which is like "Cert ISIN, Certificate Name,Ticker, Stock Name")
+    const select = document.getElementById('cert_select');
+    select.innerHTML = '<option value="">--Please choose an option--</option>';
+    let uniqueISINs = new Set();
+    data.forEach(cert => {
+      // split cert by comma and take the first part as the cert name
+      value = cert.split(',')[0];
+        name = cert.split(',')[1];
+        // test if value is already in uniqueISINs, if not add it to the select options
+        if (uniqueISINs.has(value)) {
+          return;
+        }
+        uniqueISINs.add(value);
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = name + ' (' + value + ')';
+        select.appendChild(option);
+      });
+
   };
 </script>

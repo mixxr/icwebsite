@@ -41,17 +41,15 @@
     { "certificate": "cert2", "ticker": "ticker3" },
     { "certificate": "cert2", "ticker": "ticker5" }
   ];
+  // entry is like "Cert ISIN, Certificate Name,Ticker, Stock Name"
   const inputData2 = [
-  "Certificate 1 US0006513541,Ticker 1 US0000713185",
-  "Certificate 2 US0004860519,Ticker 2 US0004258181",
-  "Certificate 3 US0005001988,Ticker 3 US0001265229",
-  "Certificate 4 US0008406932,Ticker 4 US0001131723",
-  "Certificate 5 US0008843169,Ticker 5 US0005606308",
-  "Certificate 6 US0001511644,Ticker 6 US0007644448",
-  "Certificate 7 US0002326255,Ticker 7 US0006150652",
-  "Certificate 8 US0008216716,Ticker 8 US0001465329",
-  "Certificate 9 US0001001108,Ticker 9 US0001729623",
-  "Certificate 10 US0005616894,Ticker 10 US0000370391"
+  "US0006513541, Certificate 1 , AAPL, Ticker 1 ",
+  "US0006513541, Certificate 1 , MSFT, Ticker 2 ",
+  "US0006513541, Certificate 1 , CRM, Ticker 3 ",
+  "US0008406932, Certificate 4 , AAPL, Ticker 4 ",
+  "US0008406932, Certificate 5 , MSFT, Ticker 5 ",
+  "US0008406932, Certificate 6 , ADBE, Ticker 6 ",
+  "US0002326255, Certificate 7 , US0006150652, Ticker 7 ",
 ];
 
 
@@ -79,20 +77,21 @@
  const transformArrayToCsv = (data, direction = 'source-to-target') => {
   // First pass: count occurrences of each certificate (parsed from the string)
   const certCounts = data.reduce((acc, row) => {
-    const [certificate] = row.split(',').map(s => s.trim());
-    acc[certificate] = (acc[certificate] || 0) + 1;
+    const [isin, certificate] = row.split(',').map(s => s.trim());
+    acc[isin] = (acc[isin] || 0) + 1;
     return acc;
   }, {});
 
   // Second pass: build CSV rows
   return data
     .map(row => {
-      const [certificate, ticker] = row.split(',').map(s => s.trim());
-      const weight = Math.round(100 / certCounts[certificate]);
+      console.log("Processing row:", row);
+      const [isin, certificate, ticker, stock_name] = row.split(',').map(s => s.trim());
+      const weight = Math.round(100 / certCounts[isin]);
 
       return direction === 'source-to-target'
-        ? `${certificate}, ${ticker}, ${weight}`
-        : `${ticker}, ${certificate}, ${weight}`;
+        ? `${certificate} ${isin}, ${stock_name} ${ticker}, ${weight}`
+        : `${stock_name} ${ticker}, ${certificate} ${isin}, ${weight}`;
     })
     .join('\n');
 };

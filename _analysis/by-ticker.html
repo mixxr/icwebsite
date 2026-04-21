@@ -2,7 +2,7 @@
 layout: page
 title: Certificates Analysis by Company
 subtitle: How a single company can influence a set of certificates
-dataTableUrl: http://127.0.0.1:8090/certificates?ticker=$ticker
+dataTableUrl: http://127.0.0.1:8080/certificates?tickers=$ticker
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
 head-extra: dtable-header.html
 footer-extra: dtable.html
@@ -24,8 +24,8 @@ document.getElementById('ticker-select').addEventListener('change', function() {
     if (ticker) {
         // Fetch data from the API endpoint
         console.log("Selected ticker: " + ticker);
-        // call http://localhost:8090/certificates?ticker=<ticker> and populate the #dTable with the response by using dataTables library
-        fetch('http://localhost:8090/certificates?ticker=' + ticker)
+        // call http://localhost:8080/certificates?ticker=<ticker> and populate the #dTable with the response by using dataTables library
+        fetch('http://localhost:8080/certificates?ticker=' + ticker)
             .then(response => response.json())
             .then(dataRaw => {
                 // Initialize DataTable
@@ -67,8 +67,8 @@ document.getElementById('ticker-select').addEventListener('change', function() {
 });
 </script>
 <script>
-  // call http://localhost:8090/tickers and populate the select options with the response
-  fetch('http://localhost:8090/tickers')
+  // call http://localhost:8080/tickers and populate the select options with the response
+  fetch('http://localhost:8080/tickers/*')
     .then(response => response.json())
     .then(data => {
       console.log('Tickers retrieved:', data);

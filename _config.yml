@@ -50,7 +50,7 @@ plugins:
   - jekyll-feed
   - jekyll-remote-theme
 
-
+site-css: "/assets/css/icws.css"
 remote_theme: daattali/beautiful-jekyll@6.0.1
 
 ###############################################
@@ -67,6 +67,7 @@ navbar-links:
     - By ISIN: "quotes/by-isin"
   Analysis: 
     - By Ticker: "analysis/by-ticker"
+    - By Sector: "analysis/by-sector"
     - Portfolio: "analysis/portfolio"
 
 ################
