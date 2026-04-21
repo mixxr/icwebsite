@@ -1,26 +1,38 @@
 <script>
-    console.log('mermaid-footer.html loaded');
+  console.log('mermaid-footer.html loaded');
 </script>
 {% if page.hasMermaid %}
- <script type="module">
-      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-      mermaid.initialize({ startOnLoad: false });
-        let g =  document.getElementsByClassName("mermaid")[0];
-        let t = document.getElementById("preview");
-        console.log("preview=", t);
-        t.onchange = function (){
-                console.log("preview::change...", mermaid);
-                // read new data from textarea
-                
-                g.innerHTML = t.value;
-                mermaid.run({
-                        nodes: document.getElementsByClassName("mermaid"),
-                });
-              };
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  const config = {
+    startOnLoad: false,
+    securityLevel: "loose",
+    sankey: {
+      showValues: false,
+      linkColor: "target",
+    },
+  };
+  mermaid.initialize(config);
 
-    </script>
-  <script>
-    const inputData = [
+  async function renderMermaid(gText, gArea) {
+    const { svg } = await mermaid.render('mermaid', gText);
+    gArea.innerHTML = svg;
+  }
+
+  let t = document.getElementById("preview");
+  t.onchange = function () {
+    console.log("preview::change...", mermaid, t.value);
+    let g = document.getElementsByClassName("mermaid")[0];
+    // g.innerHTML = t.value;
+    // mermaid.run({
+    //         nodes: document.getElementsByClassName("mermaid"),
+    // });
+    renderMermaid(t.value, g);
+  };
+
+</script>
+<script>
+  const inputData = [
     { "certificate": "cert1", "ticker": "ticker1" },
     { "certificate": "cert1", "ticker": "ticker2" },
     { "certificate": "cert1", "ticker": "ticker3" },
@@ -28,27 +40,69 @@
     { "certificate": "cert2", "ticker": "ticker2" },
     { "certificate": "cert2", "ticker": "ticker3" },
     { "certificate": "cert2", "ticker": "ticker5" }
+  ];
+  const inputData2 = [
+  "Certificate 1 US0006513541,Ticker 1 US0000713185",
+  "Certificate 2 US0004860519,Ticker 2 US0004258181",
+  "Certificate 3 US0005001988,Ticker 3 US0001265229",
+  "Certificate 4 US0008406932,Ticker 4 US0001131723",
+  "Certificate 5 US0008843169,Ticker 5 US0005606308",
+  "Certificate 6 US0001511644,Ticker 6 US0007644448",
+  "Certificate 7 US0002326255,Ticker 7 US0006150652",
+  "Certificate 8 US0008216716,Ticker 8 US0001465329",
+  "Certificate 9 US0001001108,Ticker 9 US0001729623",
+  "Certificate 10 US0005616894,Ticker 10 US0000370391"
 ];
 
-function transformJsonToCsv(data) {
+
+  function transformJsonToCsv(data, direction = 'source-to-target') {
     // 1. Count occurrences of each certificate
     const certCounts = data.reduce((acc, item) => {
-        acc[item.certificate] = (acc[item.certificate] || 0) + 1;
-        return acc;
+      acc[item.certificate] = (acc[item.certificate] || 0) + 1;
+      return acc;
     }, {});
 
     // 2. Map data to CSV rows with the calculated integer
     const csvRows = data.map(item => {
-        const totalForCert = certCounts[item.certificate];
-        const weight = Math.round(100 / totalForCert); // Using Math.round for "approx"
-        
+      const totalForCert = certCounts[item.certificate];
+      const weight = Math.round(100 / totalForCert); // Using Math.round for "approx"
+      if (direction === 'source-to-target') {
         return `${item.certificate}, ${item.ticker}, ${weight}`;
+      } else {
+        return `${item.ticker}, ${item.certificate}, ${weight}`;
+      }
     });
 
     return csvRows.join('\n');
-}
+  }
 
-const result = transformJsonToCsv(inputData);
-console.log(result);
-  </script>
+ const transformArrayToCsv = (data, direction = 'source-to-target') => {
+  // First pass: count occurrences of each certificate (parsed from the string)
+  const certCounts = data.reduce((acc, row) => {
+    const [certificate] = row.split(',').map(s => s.trim());
+    acc[certificate] = (acc[certificate] || 0) + 1;
+    return acc;
+  }, {});
+
+  // Second pass: build CSV rows
+  return data
+    .map(row => {
+      const [certificate, ticker] = row.split(',').map(s => s.trim());
+      const weight = Math.round(100 / certCounts[certificate]);
+
+      return direction === 'source-to-target'
+        ? `${certificate}, ${ticker}, ${weight}`
+        : `${ticker}, ${certificate}, ${weight}`;
+    })
+    .join('\n');
+};
+
+
+
+
+  const result = transformJsonToCsv(inputData);
+  console.log("result from transformJsonToCsv:", result);
+  const result2 = transformArrayToCsv(inputData2);
+  console.log("result2 from transformArrayToCsv:", result2);
+</script>
 {%- endif %}

@@ -23,7 +23,7 @@ Type [tags]
 
 # certificates-tickers
 /certificates-tickers?tickers=[<ticker1>,...,<tickerN>]&op=[OR|AND]
-/certificates-tickers?certificates=[<cart1>,...,<certN>]&op=[OR|AND]
+/certificates-tickers?certificates=[<cert1>,...,<certN>]&op=[OR|AND]
 {
     [
         { "certificate":"cert1", "ticker": "ticker1"},

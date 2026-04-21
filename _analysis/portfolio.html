@@ -3,9 +3,9 @@ layout: page
 title: Portfolio Analysis
 subtitle: How a single company can influence your portfolio
 hasMermaid: true
-<!-- ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css -->
 footer-extra: mermaid-footer.html
 comments: false
+certificatesUrl: http://127.0.0.1:8080/certificates-tickers/$ticker1,$ticker2,$ticker3
 ---
 <pre class="mermaid">
   sankey-beta
@@ -14,24 +14,32 @@ AA 'waste',Bio,10
 BB ,Bio,10
 CC ,Bio,10
     </pre>
-    <button id="test">Test</button>
-    <textarea id="preview" hidden></textarea>
+<button id="btnTest">Test</button>
+<textarea id="preview" hidden></textarea>
 
-    <script>
-            document.getElementById('test').onclick = function (){
-                console.log("test::click...");
-                let t = document.getElementById("preview");
-                t.value = `  sankey-beta
-                  AA 'waste',Bio,10
-                  BB ,Bio,10
-                  CC ,Bio,10
-                  AA, Trio, 20
-                  CC, Trio, 20
-                  DD, Bio, 10
-                  EE, Alpha, 15
-                  CC, Alpha, 15
-                  BB, Alpha, 15`;
-
-t.onchange();
+<script>
+  let tt = false;
+  document.getElementById('btnTest').onclick = async function () {
+    tt = !tt;
+    //console.log("test::click...tt:", tt, tt ? 'target-to-source' : 'source-to-target');
+    let url = '{{ page.certificatesUrl }}'; 
+    let paramNames = url.match(/\$[a-zA-Z0-9_]+/g);
+    //console.log('Fetching data from', url, 'with params', paramNames);
+     paramNames.forEach(param => {
+        let value = "AAPL";
+        if (value) {
+            url = url.replace('$' + param, value);
         }
-    </script>
+    });
+    console.log('Fetching data from', url);
+    let response = await fetch(url);
+    const data = await response.json();
+    console.log("test::data:", data);
+    const result = transformArrayToCsv(data, tt ? 'target-to-source' : 'source-to-target');
+
+    let t = document.getElementById("preview");
+    t.value = "  sankey-beta\n" + result;
+        
+    t.onchange();
+  };
+</script>
