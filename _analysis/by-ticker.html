@@ -15,36 +15,33 @@ comments: false
 <div class="container">
 <p>Select the company and analyze the certificates impacted by it.</p>
 
-<select name="ticker" id="ticker-select">
+<select name="ticker" id="ticker_select">
   <option value="">--Please choose an option--</option>
 </select>
 <script>
-document.getElementById('ticker-select').addEventListener('change', function() {
+  <!-- manage ticker once selected from options -->
+document.getElementById('ticker_select').addEventListener('change', function() {
     var ticker = this.value;
     if (ticker) {
         // Fetch data from the API endpoint
-        console.log("Selected ticker: " + ticker);
-        // call http://localhost:8080/certificates?ticker=<ticker> and populate the #dTable with the response by using dataTables library
-        fetch('http://localhost:8080/certificates?ticker=' + ticker)
+        console.log("Selected ticker: ", '{{ site.wsUrl }}/certificates-tickers/*?tickers=' , ticker);
+        fetch('{{ site.wsUrl }}/certificates?tickers=' + ticker, {
+              method: "GET",
+              headers: {
+                "Content-Type": "text/plain",
+                "Authorization": "Bearer mysupersecret2026"
+              }
+            })
             .then(response => response.json())
             .then(dataRaw => {
-                // Initialize DataTable
-                // let table = new DataTable('#dTable', {
-                //     data: data,
-                //     columns: [
-                //         { title: "ISIN", data: "isin" },
-                //         { title: "Name", data: "name" },
-                //         { title: "Ask", data: "ask" },
-                //         { title: "Bid", data: "bid" },
-                //         { title: "Currency", data: "currency" },
-                //         { title: "Obs Date", data: "obs_date" }
-                //     ]
-                // });
-                //var table = document.getElementById('dTable').DataTable();
-                dataRaw.shift();
-            let data = dataRaw.map(function (item) {
-                return item.split(','); // wrap each string in an array
-            });
+              const extractCols = dataRaw.map(row => {
+                const parts = row.split(";");
+                return parts.slice(0, 4).map(p => p.trim()).join("; ");
+              });
+
+              let data = dataRaw.map(function (item) {
+                  return item.split(';'); // wrap each string in an array
+              });
 
                 console.log('DataTable retrieved:', table);
                 table.clear(); // Clear existing data
@@ -67,16 +64,23 @@ document.getElementById('ticker-select').addEventListener('change', function() {
 });
 </script>
 <script>
-  // call http://localhost:8080/tickers and populate the select options with the response
-  fetch('http://localhost:8080/tickers/*')
+  console.log('URL: {{ site.wsUrl }}/tickers/*');
+  fetch('{{ site.wsUrl }}/tickers/*', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer mysupersecret2026"
+      }
+    })   
     .then(response => response.json())
     .then(data => {
-      console.log('Tickers retrieved:', data);
-      const select = document.getElementById('ticker-select');
-      data.forEach(ticker => {
+      const uniqueSorted = [...new Set(data)].sort();
+      console.log('Tickers retrieved:', data.length, uniqueSorted.length);
+      const select = document.getElementById('ticker_select');
+      uniqueSorted.forEach(ticker => {  
         // split ticketer by comma and take the first part as the ticker name
-        value = ticker.split(',')[0];
-        name = ticker.split(',')[1];
+        value = ticker.split(';')[0];
+        name = ticker.split(';')[1];
         const option = document.createElement('option');
         option.value = value;
         option.textContent = name + ' (' + value + ')';
@@ -93,12 +97,7 @@ CERTIFICATES
     <th>ISIN</th>
     <th>Issuer</th>
     <th>Name</th>
-    <th>Composition</th>
-    <th>Issued</th>
-    <th>Expires</th>
-    <th>Currency</th>
-    <th>Coupon</th>
-    <th>Type</th>
+    <th>Tags</th>
   </tr>
 </thead>
 <tbody>

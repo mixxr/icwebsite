@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Investment Certificates Web Service
+title: iCertificates
 email: digital.posture.info@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
@@ -26,9 +26,13 @@ description: >- # this means to ignore newlines until "baseurl:"
   Google search results) and in your feed.xml site description.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-author: Michelangelo Serpico
+author: Digital Posture
 
 dataTableUrl: http://127.0.0.1:8090
+
+# websvc config
+col_sep: ';'
+wsUrl: https://potential-pancake-59r79x6qgjh75ww-8080.app.github.dev
 
 permalink: /:title/
 
