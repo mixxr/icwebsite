@@ -7,18 +7,42 @@ comments: false
 hasMermaid: true
 
 ---
-<pre class="mermaid">
-  
-</pre>
+<div class="tool-container">
 
-<label for="cert_select">Select a certificate or copy a list of certificate ISINs:</label>
-<select name="cert_select" id="cert_select">
-  <option value="">--Please choose an option--</option>
-</select>
-<textarea id="cert_csv_list" placeholder="DE000VG656A7,NLBNPIT30309"></textarea>
+  <!-- Chart -->
+  <div class="tool-section">
+    <pre class="mermaid"></pre>
+  </div>
 
-<button id="btnLoad">Load Data</button>
-<button id="btnSwap">Swap Certs/Tickers</button>
+  <!-- Input controls -->
+  <div class="tool-section">
+    <label for="cert_select" class="tool-label">
+      Select a certificate or paste a list of ISINs:
+    </label>
+
+    <select name="cert_select" id="cert_select" class="tool-input">
+      <option value="">-- Choose a certificate --</option>
+    </select>
+
+    <textarea
+      id="cert_csv_list"
+      class="tool-input"
+      rows="3"
+      placeholder="DE000VG656A7, NLBNPIT30309"
+    ></textarea>
+  </div>
+
+  <!-- Actions -->
+  <div class="tool-actions">
+    <button id="btnLoad" class="btn btn-primary">
+      Load Data
+    </button>
+    <button id="btnSwap" class="btn btn-secondary">
+      Swap Certs ↔ Tickers
+    </button>
+  </div>
+
+</div>
 
 <textarea id="mm_preview" hidden></textarea>
 

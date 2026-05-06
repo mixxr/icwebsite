@@ -6,3 +6,120 @@ h1 {
   font-size: 1.4rem !important;
   font-weight: 400 !important;
 }
+
+.btn-outline {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 2px solid #4f46e5;
+  color: #4f46e5;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background: #4f46e5;
+  color: white;
+}
+
+.tool-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 16px;
+  border-radius: 10px;
+  background: #f9fafb;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.tool-section {
+  margin-bottom: 16px;
+}
+
+.tool-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.tool-input {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.tool-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-primary {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+.btn-secondary {
+  background: white;
+  border: 1px solid #4f46e5;
+  color: #4f46e5;
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.tool-header h3 {
+  margin-bottom: 4px;
+}
+
+.tool-description {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.table-count {
+  font-size: 13px;
+  color: #888;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.styled-table thead {
+  background: #f3f4f6;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.styled-table tbody tr:hover {
+  background: #f9fafb;
+}

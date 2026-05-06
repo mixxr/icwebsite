@@ -12,12 +12,47 @@ comments: false
 #     //code.jquery.com/jquery-3.5.1.min.js
 # ]
 ---
-<div class="container">
-<p>Select the company and analyze the certificates impacted by it.</p>
+<div class="tool-container">
 
-<select name="ticker" id="ticker_select">
-  <option value="">--Please choose an option--</option>
-</select>
+  <!-- Header -->
+  <div class="tool-header">
+    <h3>Certificate Explorer</h3>
+    <p class="tool-description">
+      Select a company to analyze related certificates.
+    </p>
+  </div>
+
+  <!-- Selector -->
+  <div class="tool-section">
+    <label for="ticker_select" class="tool-label">Company</label>
+    <select name="ticker" id="ticker_select" class="tool-input">
+      <option value="">-- Choose a company --</option>
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div class="tool-section">
+    <div class="table-header">
+      <h4>Certificates</h4>
+      <span id="result_count" class="table-count"></span>
+    </div>
+
+    <div class="table-wrapper">
+      <table id="dTable" class="styled-table" data-dt-path="" data-dt-run="false">
+        <thead>
+          <tr>
+            <th>ISIN</th>
+            <th>Issuer</th>
+            <th>Name</th>
+            <th>Tags</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
 <script>
   <!-- manage ticker once selected from options -->
 document.getElementById('ticker_select').addEventListener('change', function() {
@@ -89,19 +124,4 @@ document.getElementById('ticker_select').addEventListener('change', function() {
     })
     .catch(error => console.error('Error fetching tickers:', error)); 
 </script>
-<div>
-CERTIFICATES
-<table id="dTable" data-dt-path="" data-dt-run="false">
-<thead>
-  <tr>
-    <th>ISIN</th>
-    <th>Issuer</th>
-    <th>Name</th>
-    <th>Tags</th>
-  </tr>
-</thead>
-<tbody>
-</tbody>
-</table>
-</div>
-</div>
+
