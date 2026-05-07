@@ -24,17 +24,12 @@ hasMermaid: true
       <option value="">-- Choose a certificate --</option>
     </select>
 
-    <textarea
-      id="cert_csv_list"
-      class="tool-input"
-      rows="3"
-      placeholder="DE000VG656A7, NLBNPIT30309"
-    ></textarea>
+    <textarea id="cert_csv_list" class="tool-input" rows="3" placeholder="DE000VG656A7, NLBNPIT30309"></textarea>
   </div>
 
   <!-- Actions -->
   <div class="tool-actions">
-    <button id="btnLoad" class="btn btn-primary">
+    <button id="btnPrimary" class="btn btn-primary">
       Load Data
     </button>
     <button id="btnSwap" class="btn btn-secondary">
@@ -47,21 +42,30 @@ hasMermaid: true
 <textarea id="mm_preview" hidden></textarea>
 
 <script>
+  let render = function (versus) {
+    const data = transformArrayToCsv(certs_ticker_data, swapSwitch ? 'target-to-source' : 'source-to-target');
+    let preview = document.getElementById("mm_preview");
+    preview.value = "  sankey-beta\n" + data;
+
+    preview.onchange();
+  }; // render
+
   // Loading cert ISINs into the input cert_select
   console.log('Loading Certificates URL: {{ site.wsUrl }}/certificates-tickers/*');
+  var secret = "{{ site.wsSecret }}";
   fetch('{{ site.wsUrl }}/certificates-tickers/*', {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer mysupersecret2026"
-      }
-    })   
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + secret
+    }
+  })
     .then(response => response.json())
     .then(data => {
       const uniqueSorted = [...new Set(data)].sort();
-      console.log('Certs retrieved:',data, data.length, uniqueSorted.length);
+      console.log('Certs retrieved:', data, data.length, uniqueSorted.length);
       const select = document.getElementById('cert_select');
-      uniqueSorted.forEach(cert => {  
+      uniqueSorted.forEach(cert => {
         // split ticketer by comma and take the first part as the ticker name
         value = cert.split(';')[0];
         name = cert.split(';')[1];
@@ -71,101 +75,37 @@ hasMermaid: true
         select.appendChild(option);
       });
     })
-    .catch(error => console.error('Error fetching Certs/Tickers:', error)); 
-    
-    //let data = []; // entry is like "Cert ISIN, Certificate Name,Ticker, Stock Name"
-    
+    .catch(error => console.error('Error fetching Certs/Tickers:', error)); // cert_select
 
-    // cert_csv_list on change => call swap function
-    // document.getElementById('cert_csv_list').onchange = async function () {
-    //   console.log("cert_csv_list::onchange", this.value);
-    // };
-    // Option cert_select
-  //  document.getElementById('cert_select').onchange = async function () {
-  //   let selectedCertISIN = this.value;
-  //   console.log("Selected cert ISIN: " + selectedCertISIN);
-  //     let result = selectedCertISIN + ", Apple AAPL, 10\n" + selectedCertISIN + ", Microsoft MSFT, 10\n" + selectedCertISIN + ", Salesforce CRM, 10\n";
 
-  //     preview.value = "  sankey-beta\n" + result;
-
-  //     preview.onchange();
-  //  }
-
-   // button btnSwap
-   let swapSwitch = false;
-   let certs_ticker_data = [];
-   document.getElementById('btnSwap').onclick = function () {
+  // button btnSwap
+  let swapSwitch = false;
+  let certs_ticker_data = [];
+  document.getElementById('btnSwap').onclick = function () {
     swapSwitch = !swapSwitch;
-    render (swapSwitch ? 'target-to-source' : 'source-to-target');
-   }
+    render(swapSwitch ? 'target-to-source' : 'source-to-target');
+  }; // .btnSwap::onclick
 
-   let render = function (versus) {
-    const data = transformArrayToCsv(certs_ticker_data, swapSwitch ? 'target-to-source' : 'source-to-target');
-    let preview = document.getElementById("mm_preview");
-    preview.value = "  sankey-beta\n" + data;
-
-    preview.onchange();
-   }
-
-   document.getElementById('btnLoad').onclick = async function () {
-    
-    //console.log("test::click...tt:", tt, tt ? 'target-to-source' : 'source-to-target');
-    // document.getElementById('cert_csv_list') HIGHER priority on cert_select
+  // button btnPrimary
+  document.getElementById('btnPrimary').onclick = async function () {
     let cert_isins = document.getElementById('cert_csv_list').value || document.getElementById('cert_select').value;
     // if (cert_isins == "") 
     //   cert_isins = document.getElementById('cert_select').value;
 
-    console.log("Selected certs: ", '{{ site.wsUrl }}/certificates-tickers/' , cert_isins);
-        fetch('{{ site.wsUrl }}/certificates-tickers/' + cert_isins, {
-              method: "GET",
-              headers: {
-                "Content-Type": "text/plain",
-                "Authorization": "Bearer mysupersecret2026"
-              }
-            })
-            .then(response => response.json())
-            .then(dataRaw => {
-                console.log("test::data:", dataRaw);
-                certs_ticker_data = dataRaw;
-                render ('source-to-target');
-            });
-   
-    // let paramNames = url.match(/\$[a-zA-Z0-9_]+/g);
-    // //console.log('Fetching data from', url, 'with params', paramNames);
-    //  paramNames.forEach(param => {
-    //     let value = "IT3424234324";
-    //     if (value) {
-    //         url = url.replace('$' + param, value);
-    //     }
-    // });
-    // console.log('Fetching data from', url);
-    // let response = await fetch(url);
-    // data = await response.json();
-    // console.log("test::data:", data);
-    // const result = transformArrayToCsv(data, swapSwitch ? 'target-to-source' : 'source-to-target');
-
-    // preview.value = "  sankey-beta\n" + result;
-
-    // preview.onchange();
-
-    // reset select by leaving the 1st entry only and update select with unique ISINs from the data (which is like "Cert ISIN, Certificate Name,Ticker, Stock Name")
-    // const select = document.getElementById('cert_select');
-    // select.innerHTML = '<option value="">--Please choose an option--</option>';
-    // let uniqueISINs = new Set();
-    // data.forEach(cert => {
-    //   // split cert by comma and take the first part as the cert name
-    //   value = cert.split(',')[0];
-    //     name = cert.split(',')[1];
-    //     // test if value is already in uniqueISINs, if not add it to the select options
-    //     if (uniqueISINs.has(value)) {
-    //       return;
-    //     }
-    //     uniqueISINs.add(value);
-    //     const option = document.createElement('option');
-    //     option.value = value;
-    //     option.textContent = name + ' (' + value + ')';
-    //     select.appendChild(option);
-    //   });
-
-  };
+    console.log("Selected certs: ", '{{ site.wsUrl }}/certificates-tickers/', cert_isins);
+    var secret = "{{ site.wsSecret }}";
+    fetch('{{ site.wsUrl }}/certificates-tickers/' + cert_isins, {
+      method: "GET",
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": "Bearer " + secret
+      }
+    })
+      .then(response => response.json())
+      .then(dataRaw => {
+        console.log("test::data:", dataRaw);
+        certs_ticker_data = dataRaw;
+        render('source-to-target');
+      });
+  }; // .btnPrimary::onclick
 </script>

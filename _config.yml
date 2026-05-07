@@ -33,6 +33,7 @@ dataTableUrl: http://127.0.0.1:8090
 # websvc config
 col_sep: ';'
 wsUrl: https://potential-pancake-59r79x6qgjh75ww-8080.app.github.dev
+site.wsSecret: mysupersecret2026
 
 permalink: /:title/
 
@@ -71,7 +72,7 @@ navbar-links:
     - By ISIN: "quotes/by-isin"
   Analysis: 
     - By Ticker: "analysis/by-ticker"
-    - By Sector: "analysis/by-sector"
+    - By Value: "analysis/by-value"
     - Portfolio: "analysis/portfolio"
 
 ################

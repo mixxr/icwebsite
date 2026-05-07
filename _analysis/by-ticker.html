@@ -4,9 +4,12 @@ title: Certificates Analysis by Company
 subtitle: How a single company can influence a set of certificates
 dataTableUrl: http://127.0.0.1:8080/certificates?tickers=$ticker
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
-head-extra: dtable-header.html
 footer-extra: dtable.html
 comments: false
+before-content: intro-page.html
+dtCols: [
+  'ISIN', 'Issuer', 'Name', 'Tags'
+]
 # ext-js: [
 #     //cdn.datatables.net/2.3.7/js/dataTables.dataTables.min.js, 
 #     //code.jquery.com/jquery-3.5.1.min.js
@@ -38,17 +41,7 @@ comments: false
     </div>
 
     <div class="table-wrapper">
-      <table id="dTable" class="styled-table" data-dt-path="" data-dt-run="false">
-        <thead>
-          <tr>
-            <th>ISIN</th>
-            <th>Issuer</th>
-            <th>Name</th>
-            <th>Tags</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+      {% include dtable-th.html %}
     </div>
   </div>
 
@@ -60,11 +53,12 @@ document.getElementById('ticker_select').addEventListener('change', function() {
     if (ticker) {
         // Fetch data from the API endpoint
         console.log("Selected ticker: ", '{{ site.wsUrl }}/certificates-tickers/*?tickers=' , ticker);
+        var secret = "{{ site.wsSecret }}";
         fetch('{{ site.wsUrl }}/certificates?tickers=' + ticker, {
               method: "GET",
               headers: {
                 "Content-Type": "text/plain",
-                "Authorization": "Bearer mysupersecret2026"
+                "Authorization": "Bearer " + secret
               }
             })
             .then(response => response.json())
@@ -100,11 +94,12 @@ document.getElementById('ticker_select').addEventListener('change', function() {
 </script>
 <script>
   console.log('URL: {{ site.wsUrl }}/tickers/*');
+  var secret = "{{ site.wsSecret }}";
   fetch('{{ site.wsUrl }}/tickers/*', {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer mysupersecret2026"
+        "Authorization": "Bearer " + secret
       }
     })   
     .then(response => response.json())

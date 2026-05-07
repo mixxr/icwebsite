@@ -3,6 +3,20 @@ layout: null
 sitemap: false
 ---
 
+// function showError(message) {
+//   const errorBox = document.getElementById('errorBox');
+
+//   errorBox.textContent = message;
+//   errorBox.classList.remove('hidden');
+// }
+
+// function clearError() {
+//   const errorBox = document.getElementById('errorBox');
+
+//   errorBox.textContent = '';
+//   errorBox.classList.add('hidden');
+// }
+/*
 getData = async function () {
     console.log('DataTables getData called');
     try {
@@ -53,4 +67,4 @@ getData = async function () {
       });
       //$('.display').dataTable();
     });
-  });
+  });*/

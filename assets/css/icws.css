@@ -22,7 +22,7 @@ h1 {
 }
 
 .tool-container {
-  max-width: 600px;
+  /* max-width: 600px; */
   margin: 20px auto;
   padding: 16px;
   border-radius: 10px;
@@ -52,6 +52,21 @@ h1 {
 .tool-actions {
   display: flex;
   gap: 10px;
+  align-items: center;
+}
+
+.message-box.error {
+  background: #ffe5e5;
+  color: #b00020;
+  border: 1px solid #ffb3b3;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  /* max-width: 300px; */
+}
+
+.hidden {
+  display: none;
 }
 
 .btn-primary {

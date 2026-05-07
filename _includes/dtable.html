@@ -14,9 +14,21 @@
       -->
 <script>
     console.log('DataTables starting...');
-    
+    function showError(message) {
+        const errorBox = document.getElementById('errorBox');
+
+        errorBox.textContent = message;
+        errorBox.classList.remove('hidden');
+    }
+
+    function clearError() {
+        const errorBox = document.getElementById('errorBox');
+
+        errorBox.textContent = '';
+        errorBox.classList.add('hidden');
+    }
     getData = async function (redirect = true) {
-        console.log('DataTables getData called');
+        console.log('====> DataTables getData called');
         try {
             // retrieve the path from the data attribute (data-dt-path) of the table element with id "dTable" and concat with page.dataTableUrl
             //let dtPath = $('#dTable').data('dt-path');
@@ -25,7 +37,7 @@
             let paramNames = url.match(/\$[a-zA-Z0-9_]+/g);
             console.log('Fetching data from', url, 'with params', paramNames);
             // get querystring parameters if paramNames is not empty and replace $param with actual value from querystring
-            if (paramNames &&paramNames.length > 0) {
+            if (paramNames && paramNames.length > 0) {
                 // remove $ from param names
                 paramNames = paramNames.map(param => param.substring(1));
                 let queryString = new URLSearchParams(window.location.search);
@@ -72,7 +84,7 @@
     $(document).ready(function () {
         console.log('DataTables document ready');
         let dtRun = $('#dTable').data('dt-run');
-        if (dtRun!=undefined && !dtRun) return;
+        if (dtRun != undefined && !dtRun) return;
 
         getData().then(function (data) {
             console.log('DataTables data received:', data);
@@ -80,7 +92,7 @@
             //        .on('search', () => console.log('DataTables data received:', 'search'))
             //        .on('select', () => console.log('DataTables data received:', 'select'))
             //        .on('user-select', () => console.log('DataTables data received:', 'user-select'));
-// https://blog.devgenius.io/making-use-of-columndefs-option-in-datatables-bc0fcc23f793
+            // https://blog.devgenius.io/making-use-of-columndefs-option-in-datatables-bc0fcc23f793
             table.clear().draw();
             table.destroy();
             table = new DataTable('#dTable', {
@@ -100,7 +112,8 @@
                             return '<a href="/quotes?isin=' + row[0] + '">' + row[0] + '</a>';
                         }
                     }
-                ]});
+                ]
+            });
         });
     });
 </script>
