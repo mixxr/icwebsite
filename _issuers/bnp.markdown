@@ -3,15 +3,16 @@ layout: page
 title:  "BNP Paribas"
 date:   2026-02-24 17:26:40 +0100
 categories: issuers
-dataTableUrl: http://127.0.0.1:8090/certificates?issuer=bnp
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
 footer-extra: dtable.html
 comments: false
-dtCols: [
+wsDatatableCols: [
   'ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Typpe'
 ]
+wsDatatablePath: /certificates/*?issuer=bnp
+wsDatatableAutoLoad: true
 ---
-BNP is...
+{{ page.title}} is...
 
 ## {{ site.issuers_par1_title }}
 The website provides clear information regarding: 

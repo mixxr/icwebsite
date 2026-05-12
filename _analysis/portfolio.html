@@ -5,7 +5,8 @@ subtitle: How a single company can influence your portfolio
 footer-extra: mermaid-footer.html
 comments: false
 hasMermaid: true
-
+wsSelectId: cert_select
+wsSelectPath: /certificates-tickers/*
 ---
 <div class="tool-container">
 
@@ -38,6 +39,9 @@ hasMermaid: true
   </div>
 
 </div>
+<!-- multiselect to list the cert_csv_list by lines -->
+<select id="cert_multiselect" class="tool-input" multiple size="5">
+</select>
 
 <textarea id="mm_preview" hidden></textarea>
 
@@ -49,34 +53,6 @@ hasMermaid: true
 
     preview.onchange();
   }; // render
-
-  // Loading cert ISINs into the input cert_select
-  console.log('Loading Certificates URL: {{ site.wsUrl }}/certificates-tickers/*');
-  var secret = "{{ site.wsSecret }}";
-  fetch('{{ site.wsUrl }}/certificates-tickers/*', {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + secret
-    }
-  })
-    .then(response => response.json())
-    .then(data => {
-      const uniqueSorted = [...new Set(data)].sort();
-      console.log('Certs retrieved:', data, data.length, uniqueSorted.length);
-      const select = document.getElementById('cert_select');
-      uniqueSorted.forEach(cert => {
-        // split ticketer by comma and take the first part as the ticker name
-        value = cert.split(';')[0];
-        name = cert.split(';')[1];
-        const option = document.createElement('option');
-        option.value = value;
-        option.textContent = name + ' (' + value + ')';
-        select.appendChild(option);
-      });
-    })
-    .catch(error => console.error('Error fetching Certs/Tickers:', error)); // cert_select
-
 
   // button btnSwap
   let swapSwitch = false;
@@ -104,8 +80,14 @@ hasMermaid: true
       .then(response => response.json())
       .then(dataRaw => {
         console.log("test::data:", dataRaw);
+        dataRaw.shift(); // remove header
         certs_ticker_data = dataRaw;
         render('source-to-target');
       });
   }; // .btnPrimary::onclick
+
+
+  // select is initialized automatically by page.wsSelectId property (if exists)
+  wsSelectId = '{{ page.wsSelectId }}';
+  wsSelectPath = '{{ page.wsSelectPath }}';
 </script>

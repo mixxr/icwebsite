@@ -28,11 +28,11 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 author: Digital Posture
 
-dataTableUrl: http://127.0.0.1:8090
+# dataTableUrl: http://127.0.0.1:8080
 
 # websvc config
 col_sep: ';'
-wsUrl: https://potential-pancake-59r79x6qgjh75ww-8080.app.github.dev
+wsUrl: http://127.0.0.1:8080
 site.wsSecret: mysupersecret2026
 
 permalink: /:title/
@@ -56,6 +56,7 @@ plugins:
   - jekyll-remote-theme
 
 site-css: "/assets/css/icws.css"
+site-js: "/assets/js/icws.js"
 remote_theme: daattali/beautiful-jekyll@6.0.1
 
 ###############################################
@@ -127,6 +128,7 @@ comments: false # micser: not sure if it works
 # their entries' file path in the `include:` list.
 #
 # exclude: ["*_copy.html", "*.txt", "**/*.old"]
+# include: ["assets/js/icws.js"]
 exclude:
   - .sass-cache/
   - .jekyll-cache/

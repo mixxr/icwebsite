@@ -3,15 +3,14 @@ layout: page
 title: Certificates Analysis by Market Value
 subtitle: Discover what certificates are sold for less than their par (face) value. 
 intro: Buying investment certificates issued below par (at a discount) is attractive primarily because it increases the potential yield and provides a built-in capital gain at maturity.
-dataTableUrl: http://127.0.0.1:8080/certificates?tickers=$ticker
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
 footer-extra: dtable.html
 comments: false
 before-content: intro-page.html
-dtCols: [
+wsDatatableCols: [
   'ISIN', 'Issuer', 'Name', 'Coupon','Ex-Date', 'Ask', 'Bid', 'Growth_1D' , 'Growth_3D', 'Growth_1W', 'Growth_2W', 'Growth_4W'
 ]
-wsMethod: /certificates-growth
+wsDatatablePath: /certificates-growth
 # ext-js: [
 #     //cdn.datatables.net/2.3.7/js/dataTables.dataTables.min.js, 
 #     //code.jquery.com/jquery-3.5.1.min.js

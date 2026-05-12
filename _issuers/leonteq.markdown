@@ -1,6 +1,6 @@
 ---
 layout: page
-title:  "Marex"
+title:  "Leonteq"
 date:   2026-02-24 17:26:40 +0100
 categories: issuers
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
@@ -9,7 +9,7 @@ comments: false
 wsDatatableCols: [
   'ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Typpe'
 ]
-wsDatatablePath: /certificates/*?issuer=marex
+wsDatatablePath: /certificates/*?issuer=leont
 wsDatatableAutoLoad: true
 ---
 {{ page.title}} is...

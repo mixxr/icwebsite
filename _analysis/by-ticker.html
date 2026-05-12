@@ -2,14 +2,16 @@
 layout: page
 title: Certificates Analysis by Company
 subtitle: How a single company can influence a set of certificates
-dataTableUrl: http://127.0.0.1:8080/certificates?tickers=$ticker
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
 footer-extra: dtable.html
 comments: false
 before-content: intro-page.html
-dtCols: [
+wsDatatableCols: [
   'ISIN', 'Issuer', 'Name', 'Tags'
 ]
+wsDatatablePath: /certificates/*
+wsSelectId: ticker_select
+wsSelectPath: /tickers/*
 # ext-js: [
 #     //cdn.datatables.net/2.3.7/js/dataTables.dataTables.min.js, 
 #     //code.jquery.com/jquery-3.5.1.min.js
@@ -52,71 +54,16 @@ document.getElementById('ticker_select').addEventListener('change', function() {
     var ticker = this.value;
     if (ticker) {
         // Fetch data from the API endpoint
-        console.log("Selected ticker: ", '{{ site.wsUrl }}/certificates-tickers/*?tickers=' , ticker);
-        var secret = "{{ site.wsSecret }}";
-        fetch('{{ site.wsUrl }}/certificates?tickers=' + ticker, {
-              method: "GET",
-              headers: {
-                "Content-Type": "text/plain",
-                "Authorization": "Bearer " + secret
-              }
-            })
-            .then(response => response.json())
-            .then(dataRaw => {
-              const extractCols = dataRaw.map(row => {
-                const parts = row.split(";");
-                return parts.slice(0, 4).map(p => p.trim()).join("; ");
-              });
-
-              let data = dataRaw.map(function (item) {
-                  return item.split(';'); // wrap each string in an array
-              });
-
-                console.log('DataTable retrieved:', table);
-                table.clear(); // Clear existing data
-                table.rows.add(data); // Add new data
-                // table.columns = [
-                //         { title: "ISIN", data: "isin" },
-                //         { title: "Name", data: "name" },
-                //         { title: "Ask", data: "ask" },
-                //         { title: "Bid", data: "bid" },
-                //         { title: "Currency", data: "currency" },
-                //         { title: "Obs Date", data: "obs_date" }
-                //     ];
-                table.draw(); // Redraw the table to reflect the new data
-                console.log('Certificates data loaded:', data.length, data);
-            })
-            .catch(error => console.error('Error fetching certificates:', error));
+        console.log("Selected ticker: ", '{{ site.wsUrl }}/certificates/*?tickers=' , ticker);
+        dtUpdate('tickers=' + ticker);
     } else {
         console.log("No ticker selected");
     }
 });
 </script>
 <script>
-  console.log('URL: {{ site.wsUrl }}/tickers/*');
-  var secret = "{{ site.wsSecret }}";
-  fetch('{{ site.wsUrl }}/tickers/*', {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + secret
-      }
-    })   
-    .then(response => response.json())
-    .then(data => {
-      const uniqueSorted = [...new Set(data)].sort();
-      console.log('Tickers retrieved:', data.length, uniqueSorted.length);
-      const select = document.getElementById('ticker_select');
-      uniqueSorted.forEach(ticker => {  
-        // split ticketer by comma and take the first part as the ticker name
-        value = ticker.split(';')[0];
-        name = ticker.split(';')[1];
-        const option = document.createElement('option');
-        option.value = value;
-        option.textContent = name + ' (' + value + ')';
-        select.appendChild(option);
-      });
-    })
-    .catch(error => console.error('Error fetching tickers:', error)); 
+    // select is initialized automatically by page.wsSelectId property (if exists)
+  wsSelectId = '{{ page.wsSelectId }}';
+  wsSelectPath = '{{ page.wsSelectPath }}';
 </script>
 
