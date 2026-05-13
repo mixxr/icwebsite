@@ -8,8 +8,7 @@
 <script>
     // usage: const plotlyData = createPlotlyData(rows, 0, 3);
     // where rows is an array of CSV lines, and 0 and 3 are the positions of source and target in the CSV columns
-    const CERT_MAX_LEN = 35;
-    const TICKER_MAX_LEN = 20;
+    const LBL_MAX_LEN = 150;
     const normalize = (str) =>
         str
             .normalize("NFD")                 // split accents
@@ -35,8 +34,12 @@
 
             const source = cols[sourcePos || 0];
             const target = cols[targetPos || 3];
-            const sourceLbl = cutIf(cols[sourceLblPos || sourcePos || 0], CERT_MAX_LEN) + " (" + source + ")";
-            const targetLbl = cutIf(cols[targetLblPos || targetPos || 3], TICKER_MAX_LEN) + " (" + target + ")";
+            const sourceLbl = (sourcePos == sourceLblPos) 
+                ? cutIf(cols[sourceLblPos || sourcePos || 0], LBL_MAX_LEN) 
+                : cutIf(cols[sourceLblPos || sourcePos || 0], LBL_MAX_LEN) + " (" + source + ")";
+            const targetLbl = (targetPos == targetLblPos) 
+                ? cutIf(cols[targetLblPos || targetPos || 3], LBL_MAX_LEN) 
+                : cutIf(cols[targetLblPos || targetPos || 3], LBL_MAX_LEN) + " (" + target + ")";
 
             if (!targets.includes(target)) {
                 targets.push(targetLbl);
