@@ -77,7 +77,7 @@ document.getElementById('btnPrimary').addEventListener('click', function() {
         console.log("Selected growth and value: ", growth, value);
         // generate base64 secret for authorization header
         // var secret = btoa("{{ site.wsSecret }}");
-        dtUpdate('growth=' + growth + '&value=' + value);
+        dtUpdate('growth1d=' + growth + '&parvalue=' + value);
        
     } else {
         console.log("No parameters selected");
