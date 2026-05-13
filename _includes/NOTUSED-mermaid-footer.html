@@ -1,7 +1,7 @@
 <script>
   console.log('mermaid-footer.html loaded');
 </script>
-{% if page.hasMermaid %}
+{% if page.hasPlot %}
 <script type="module">
   // mermaid initialization and configuration
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
@@ -82,7 +82,7 @@
   return data
     .map(row => {
       console.log("[mermaid] Processing row:", row);
-      const [isin, certificate_long, ticker, stock_name, stock_isin] = row.split('{{ site.col_sep }}').map(s => normalize(s));
+      const [isin, certificate_long, ticker, stock_name, stock_isin] = row.split('{{ site.ws_csv_delimiter }}').map(s => normalize(s));
 
       const certificate = cutIf(certificate_long, CERT_MAX_LEN);
       const weight = Math.round(100 / certCounts[isin]);

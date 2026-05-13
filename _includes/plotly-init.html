@@ -1,0 +1,139 @@
+<script>
+    console.log('plotly-init.html INIT -- it loads plotly js and d3');
+</script>
+{% if page.hasPlot %}
+<script src='https://cdn.plot.ly/plotly-3.4.0.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
+
+<script>
+    // usage: const plotlyData = createPlotlyData(rows, 0, 3);
+    // where rows is an array of CSV lines, and 0 and 3 are the positions of source and target in the CSV columns
+    const CERT_MAX_LEN = 35;
+    const TICKER_MAX_LEN = 20;
+    const normalize = (str) =>
+        str
+            .normalize("NFD")                 // split accents
+            .replace(/[\u0300-\u036f]/g, "")  // remove accents
+            .replaceAll(",", "-")             // replace commas
+            .trim();
+    const cutIf = (str, maxLen) =>
+        str.length > maxLen
+            ? str.slice(0, maxLen) + "...\n"
+            : str;
+
+    const createPlotlyData = (rows, sourcePos, targetPos, sourceLblPos, targetLblPos) => {
+        // unique nodes
+        const sources = [];
+        const targets = [];
+
+        // links
+        const relations = [];
+
+        // skip header
+        rows.slice(1).forEach(row => {
+            const cols = row.split('{{ site.ws_csv_delimiter }}');
+
+            const source = cols[sourcePos || 0];
+            const target = cols[targetPos || 3];
+            const sourceLbl = cutIf(cols[sourceLblPos || sourcePos || 0], CERT_MAX_LEN) + " (" + source + ")";
+            const targetLbl = cutIf(cols[targetLblPos || targetPos || 3], TICKER_MAX_LEN) + " (" + target + ")";
+
+            if (!targets.includes(target)) {
+                targets.push(targetLbl);
+            }
+
+            if (!sources.includes(source)) {
+                sources.push(sourceLbl);
+            }
+
+            relations.push([sourceLbl, targetLbl]);
+        });
+
+        // labels and colors
+        const labels = [
+            ...sources,
+            ...targets
+        ];
+
+        const colors = [
+            ...sources.map(() => "blue"),
+            ...targets.map(() => "green")
+        ];
+
+        // map label -> position
+        const positions = {};
+
+        labels.forEach((label, index) => {
+            positions[label] = index;
+        });
+
+        // build links
+        const source = [];
+        const target = [];
+        const value = [];
+
+        relations.forEach(([sourceLabel, targetLabel]) => {
+            source.push(positions[sourceLabel]);
+            target.push(positions[targetLabel]);
+            value.push(1);
+        });
+
+        return {
+            node: {
+                label: labels,
+                color: colors
+            },
+            link: {
+                source,
+                target,
+                value
+            }
+        };
+    };
+
+    const drawPlotly = (data, isSwapped) => {
+        // check if data is not empty
+        if (!data || !data.node || !data.link) {
+            console.error("Invalid data for Plotly:", data);
+            return;
+        }
+        const sources = isSwapped ? data.link.target : data.link.source;
+        const targets = isSwapped ? data.link.source : data.link.target;
+        const plotData = [{
+            type: "sankey",
+              domain: {
+    x: [0,1],
+    y: [0,1]
+  },
+            orientation: "h",
+            node: {
+                pad: 15,
+                thickness: 30,
+                line: {
+                    color: "black",
+                    width: 0.5
+                },
+                label: data.node.label,
+                color: data.node.color
+            },
+
+            link: {
+                source: sources,
+                target: targets,
+                value: data.link.value
+            }
+        }];
+
+        console.log("test::plotlyData:", plotData);
+
+        const layout = {
+            title: "Sankey Diagram",
+            font: {
+                size: 10
+            }
+        };
+
+        Plotly.react('plotlyid', plotData, layout, {displayModeBar: false});
+    };
+</script>
+{%- endif %}

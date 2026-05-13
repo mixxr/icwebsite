@@ -1,14 +1,14 @@
 ---
 layout: page
-title: Portfolio Analysis
+title: Certificate Analysis by Industry
 subtitle: How a single company can influence your portfolio
 footer-extra: [plotly-init.html, select-init.html]
 comments: false
 hasPlot: true
 wsSelectId: cert_select
 wsSelectPath: /certificates-tickers/*
-wsSelectValPos: 0
-wsSelectTextPos: 1
+wsSelectValPos: 5
+wsSelectTextPos: 5
 ---
 <div class="tool-container">
 
@@ -21,14 +21,14 @@ wsSelectTextPos: 1
   <!-- Input controls -->
   <div class="tool-section">
     <label for="cert_select" class="tool-label">
-      Select a certificate or paste a list of ISINs:
+      Select an industry or paste a list below:
     </label>
 
     <select name="cert_select" id="cert_select" class="tool-input">
-      <option value="">-- Choose a certificate --</option>
+      <option value="">-- Choose an industry --</option>
     </select>
 
-    <textarea id="cert_csv_list" class="tool-input" rows="3" placeholder="DE000VG656A7, NLBNPIT30309"></textarea>
+    <textarea id="cert_csv_list" class="tool-input" rows="3" placeholder="Bank, Software"></textarea>
   </div>
 
   <!-- Actions -->
@@ -49,13 +49,6 @@ wsSelectTextPos: 1
 <!-- <textarea id="mm_preview" hidden></textarea> -->
 
 <script>
-  let render = function (versus) {
-    const data = transformArrayToCsv(certs_ticker_data, swapSwitch ? 'target-to-source' : 'source-to-target');
-    let preview = document.getElementById("mm_preview");
-    preview.value = "  sankey-beta\n" + data;
-
-    preview.onchange();
-  }; // render
 
   // button btnSwap
   let swapSwitch = false;
@@ -69,13 +62,13 @@ wsSelectTextPos: 1
 
   // button btnPrimary
   document.getElementById('btnPrimary').onclick = async function () {
-    let cert_isins = document.getElementById('cert_csv_list').value || document.getElementById('cert_select').value;
+    let selected_criteria = document.getElementById('cert_csv_list').value || document.getElementById('cert_select').value;
     // if (cert_isins == "") 
     //   cert_isins = document.getElementById('cert_select').value;
 
-    console.log("Selected certs: ", '{{ site.wsUrl }}/certificates-tickers/', cert_isins);
+    console.log("Selected criteria: ", '{{ site.wsUrl }}/certificates-tickers/', selected_criteria);
     var secret = "{{ site.wsSecret }}";
-    fetch('{{ site.wsUrl }}/certificates-tickers/' + cert_isins, {
+    fetch('{{ site.wsUrl }}/certificates-tickers/*', {
       method: "GET",
       headers: {
         "Content-Type": "text/plain",
@@ -86,7 +79,12 @@ wsSelectTextPos: 1
       .then(dataRaw => {
         console.log("test::data:", dataRaw);
         //dataRaw.shift(); // remove header
-        certs_ticker_data = createPlotlyData(dataRaw, 0, 3, 1, 2); // source is cert at pos 0, target is ticker at pos 3
+        // compare selected_criteria with data at pos 5 (industry) and filter accordingly
+        const filteredData = dataRaw.filter(row => {
+          const industry = row.split(";")[5];
+          return industry && industry.toLowerCase().includes(selected_criteria.toLowerCase());
+        });
+        certs_ticker_data = createPlotlyData(filteredData, 0, 3, 1, 2); // source is cert at pos 0, target is ticker at pos 3
         console.log("test::plotlyData:", certs_ticker_data);
         drawPlotly(certs_ticker_data, swapSwitch);
         //render('source-to-target');

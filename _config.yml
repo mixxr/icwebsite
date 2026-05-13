@@ -29,7 +29,7 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 author: Digital Posture
 
 # websvc config
-col_sep: ';'
+ws_csv_delimiter: ';'
 wsUrl: http://127.0.0.1:8080
 site.wsSecret: mysupersecret2026
 

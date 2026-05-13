@@ -23,7 +23,12 @@ const createSelectUpdater = ({ wsUrl, wsSecret }) => {
 
                 data.shift(); // remove header
 
-                const uniqueSorted = [...new Set(data)].sort();
+                // const uniqueSorted = [...new Set(data)].sort();
+                // sort by text column (case-insensitive)
+                const uniqueSorted = data.sort((a, b) =>
+                    a.split(";")[1].toLowerCase()
+                        .localeCompare(b.split(";")[1].toLowerCase())
+                    );
 
                 console.log(
                     'Data retrieved:',
@@ -74,13 +79,15 @@ const createSelectUpdater = ({ wsUrl, wsSecret }) => {
 // autopopulate select options if page.wsSelectId and page.wsSelectPath are defined
 const wsSelectId = '{{ page.wsSelectId }}';
 const wsSelectPath = '{{ page.wsSelectPath }}';
+const wsSelectValPos = '{{ page.wsSelectValPos | default: 0 }}';
+const wsSelectTextPos = '{{ page.wsSelectTextPos | default: 1 }}';
 if (typeof wsSelectId !== 'undefined' && typeof wsSelectPath !== 'undefined') {
-    console.log('Loading Data for Select Options: {{ site.wsUrl }}', wsSelectId, wsSelectPath, 0, 1);
+    console.log('Loading Data for Select Options: {{ site.wsUrl }}', wsSelectId, wsSelectPath, wsSelectValPos, wsSelectTextPos);
     const updateSelectOptions = createSelectUpdater({
         wsUrl: '{{ site.wsUrl }}',
         wsSecret: '{{ site.wsSecret }}'
     });
-    updateSelectOptions(wsSelectId, wsSelectPath, 0, 1);
+    updateSelectOptions(wsSelectId, wsSelectPath, parseInt(wsSelectValPos), parseInt(wsSelectTextPos));
 }
 
 </script>
