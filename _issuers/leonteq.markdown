@@ -6,10 +6,11 @@ categories: issuers
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
 footer-extra: dtable-init.html
 comments: false
+wsDatatableIds: [ certs_list ]
 wsDatatableCols: [
-  'ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Typpe'
+  ['ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Type']
 ]
-wsDatatablePath: /certificates/*?issuer=leont
+wsDatatablePaths: [ /certificates/*?issuer=leont ]
 wsDatatableAutoLoad: true
 ---
 {{ page.title}} is...
@@ -30,5 +31,5 @@ Note: If you would like to add your own certificate, please send us a [message](
 <!--  /certificates?issuer=[issuer] -->
 
 <!-- <table id="dTable" data-dt-path="/certificates/{{page.slug}}"> -->
-{% include dtable-th.html %}
+{% include dtable-th.html tablePos=0 %}
 </div>
