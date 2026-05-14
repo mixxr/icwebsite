@@ -2,7 +2,7 @@
 layout: page
 full-width: true
 title: Certificate Analysis by Industry
-subtitle: How a single company can influence your portfolio
+subtitle: How a single industry can influence your portfolio
 footer-extra: [plotly-init.html, select-init.html]
 comments: false
 hasPlot: true
@@ -40,6 +40,7 @@ wsSelectTextPos: 5
     <button id="btnSwap" class="btn btn-secondary">
       Swap Certs ↔ Tickers
     </button>
+    {% include error-box.html errorBoxId="errorBoxForLoad" %} 
   </div>
 
 </div>
@@ -56,16 +57,23 @@ wsSelectTextPos: 5
   let certs_ticker_data = [];
 
   document.getElementById('btnSwap').onclick = function () {
-    swapSwitch = !swapSwitch;
-    //render(swapSwitch ? 'target-to-source' : 'source-to-target');
-    drawPlotly(certs_ticker_data, swapSwitch);
+    if (certs_ticker_data && certs_ticker_data.node && certs_ticker_data.link) {
+      swapSwitch = !swapSwitch;
+      //render(swapSwitch ? 'target-to-source' : 'source-to-target');
+      drawPlotly(certs_ticker_data, swapSwitch);
+    } else {
+      ErrorBox.show("No data to swap yet.", "errorBoxForLoad");
+    }
   }; // .btnSwap::onclick
 
   // button btnPrimary
   document.getElementById('btnPrimary').onclick = async function () {
     let selected_criteria = document.getElementById('criteria_csv_list').value || document.getElementById('criteria_select').value;
     selected_criteria = selected_criteria.trim();
-    // if (cert_isins == "") 
+    if (selected_criteria == "") {
+      ErrorBox.show("Please select an industry or paste a list of industries to load data.", "errorBoxForLoad");
+      return; 
+    }
     //   cert_isins = document.getElementById('criteria_select').value;
 
     console.log("Selected criteria: ", '{{ site.wsUrl }}/certificates-tickers/*?industries=', selected_criteria);

@@ -1,0 +1,2 @@
+%E2%80%94 Software—Infrastructure
+str1 - str2 => contiene spazi tra 2 word della stesso field (eg. industria o settore)

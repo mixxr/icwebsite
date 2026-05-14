@@ -12,25 +12,7 @@
          Then it invokes DataTable's standard initializer
          Credit here: http://www.beardedhacker.com/blog/2015/08/28/add-class-attribute-to-markdown-table/
       -->
-<script>
-    
-    function showError(message) {
-        clearError();
-        const errorBox = document.getElementById('errorBox');
 
-        errorBox.textContent = message;
-        errorBox.classList.remove('hidden');
-    }
-
-    function clearError() {
-        const errorBox = document.getElementById('errorBox');
-
-        errorBox.textContent = '';
-        errorBox.classList.add('hidden');
-    }
-    // var table = new DataTable('#dTable');
-    
-</script>
 <script>
     console.log('JS DataTables starting...');
     const tableIds = {{ page.wsDatatableIds | jsonify }};

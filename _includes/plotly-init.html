@@ -8,7 +8,7 @@
 <script>
     // usage: const plotlyData = createPlotlyData(rows, 0, 3);
     // where rows is an array of CSV lines, and 0 and 3 are the positions of source and target in the CSV columns
-    const LBL_MAX_LEN = 150;
+    const LBL_MAX_LEN = 100;
     const normalize = (str) =>
         str
             .normalize("NFD")                 // split accents
@@ -29,7 +29,7 @@
         const relations = [];
 
         // skip header
-        rows.slice(1).forEach(row => {
+        rows.forEach(row => {
             const cols = row.split('{{ site.ws_csv_delimiter }}');
 
             const source = cols[sourcePos || 0];

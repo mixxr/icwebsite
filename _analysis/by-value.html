@@ -14,7 +14,7 @@ wsDatatableCols: [
   ['ISIN', 'Issuer', 'Name', 'Coupon','Ex-Date', 'Ask', 'Bid', 'Growth_1D' , 'Growth_3D', 'Growth_1W', 'Growth_2W', 'Growth_4W']
 ]
 wsDatatablePaths: [
-  /certificates-growth
+  /certificates-growth/*
 ]
 # ext-js: [
 #     //cdn.datatables.net/2.3.7/js/dataTables.dataTables.min.js, 
@@ -54,7 +54,7 @@ wsDatatablePaths: [
     <button id="btnPrimary" class="btn btn-primary">
       Search
     </button>
-     <div id="errorBox" class="message-box error hidden"></div>
+     {% include error-box.html errorBoxId="errorBoxForLoad" %}
   </div>
 
   <!-- Table -->
@@ -74,7 +74,6 @@ wsDatatablePaths: [
 // button btnPrimary
 document.getElementById('btnPrimary').addEventListener('click', function() {
   // get growth and value criteria
-    clearError();
     let growth = document.getElementById('growth').value;
     let value = document.getElementById('market_value').value;
     if (growth || value) {
@@ -86,7 +85,7 @@ document.getElementById('btnPrimary').addEventListener('click', function() {
        
     } else {
         console.log("No parameters selected");
-        showError("Please select at least one criteria for growth or market value.");
+        ErrorBox.show("Please select at least one criteria for growth or market value.", "errorBoxForLoad");
     }
 });
 </script>

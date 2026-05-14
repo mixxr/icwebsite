@@ -64,6 +64,7 @@ wsDatatablePaths: [
 
       <div class="tool-actions">
         <button id="btnPrimary" class="btn btn-primary">Load Data</button>
+          {% include error-box.html errorBoxId="errorBoxForLoad" %}
       </div>
 
     </div>
@@ -80,6 +81,7 @@ wsDatatablePaths: [
 
       <div class="tool-actions">
         <button id="btnSwap" class="btn btn-secondary">Swap Certs ↔ Tickers</button>
+        {% include error-box.html errorBoxId="errorBoxForSwap" %}
       </div>
 
        {% include dtable-th.html tablePos=1 %}
@@ -113,15 +115,21 @@ wsDatatablePaths: [
   let certs_ticker_data = [];
 
   document.getElementById('btnSwap').onclick = function () {
-    swapSwitch = !swapSwitch;
-    //render(swapSwitch ? 'target-to-source' : 'source-to-target');
-    drawPlotly(certs_ticker_data, swapSwitch);
+    if (certs_ticker_data && certs_ticker_data.node && certs_ticker_data.link) {
+      swapSwitch = !swapSwitch;
+      drawPlotly(certs_ticker_data, swapSwitch);
+    } else {
+      ErrorBox.show("No data to swap yet.", "errorBoxForSwap");
+    }   
   }; // .btnSwap::onclick
 
   // button btnPrimary
   document.getElementById('btnPrimary').onclick = async function () {
     let cert_isins = document.getElementById('cert_csv_list').value.trim() || document.getElementById('cert_select').value;
-    if (cert_isins == "") return; // TODO: Info Message: Please enter at least one certificate ISIN.
+    if (cert_isins == "") {
+      ErrorBox.show("Please select a certificate or paste a list of ISINs to load data.", "errorBoxForLoad");
+      return;
+    }
 
     console.log("Selected certs: ", '{{ site.wsUrl }}/certificates-tickers/', cert_isins);
     var secret = "{{ site.wsSecret }}";
@@ -135,7 +143,7 @@ wsDatatablePaths: [
       .then(response => response.json())
       .then(dataRaw => {
         console.log("test::data:", dataRaw);
-        //dataRaw.shift(); // remove header
+        dataRaw.shift(); // remove header
         certs_ticker_data = createPlotlyData(dataRaw, 0, 3, 1, 2); // source is cert at pos 0, target is ticker at pos 3
         console.log("test::plotlyData:", certs_ticker_data);
         drawPlotly(certs_ticker_data, swapSwitch);

@@ -69,9 +69,11 @@ navbar-links:
     - Request: "issuers/request"
   Quotes: 
     - By ISIN: "quotes/by-isin"
-  Analysis: 
+  Search: 
     - By Ticker: "analysis/by-ticker"
     - By Value: "analysis/by-value"
+    - By Industry: "analysis/by-industry"
+  Analysis:
     - Portfolio: "analysis/portfolio"
 
 ################
@@ -141,6 +143,9 @@ exclude:
   - "*_copy*"
   - "*.txt"
   - "**/*.old"
+  - "README.md"
+  - "LICENSE"
+  - "**/NOT-USED*"
 
 ## #################
 ## Content settings
