@@ -66,6 +66,8 @@ navbar-links:
   Issuers:
     - BNP: "issuers/bnp"
     - Marex: "issuers/marex"
+    - Vontobel: "issuers/vontobel"
+    - Leonteq: "issuers/leonteq"
     - Request: "issuers/request"
   Quotes: 
     - By ISIN: "quotes/by-isin"

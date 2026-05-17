@@ -1,6 +1,6 @@
 ---
 layout: page
-title:  "Marex"
+title:  "Vontobel"
 date:   2026-02-24 17:26:40 +0100
 categories: issuers
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
@@ -10,7 +10,7 @@ wsDatatableIds: [ certs_list ]
 wsDatatableCols: [
   ['ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Type']
 ]
-wsDatatablePaths: [ /certificates/*?issuer=marex ]
+wsDatatablePaths: [ /certificates/*?issuer=vontobel ]
 wsDatatableAutoLoad: true
 ---
 {{ page.title}} is...
